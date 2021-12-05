@@ -1,16 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package com.mycompany.automatedtellermachine;
 
 import javax.swing.JOptionPane;
 import java.sql.*;
 
-/**
- *
- * @author kisha
- */
 public class LoginActivity extends javax.swing.JFrame {
     
     String cardNumberEntered;
@@ -1033,9 +1025,7 @@ public class LoginActivity extends javax.swing.JFrame {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost/atm", "root", "Kishan@1072");
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(Query);
-            
             rs.next();
-            
             int pin = rs.getInt(3);
             String card = rs.getString(2);
             user = rs.getString(1);
@@ -1046,11 +1036,12 @@ public class LoginActivity extends javax.swing.JFrame {
                 pinField.setText("");
             }
             else {
-                JOptionPane.showMessageDialog(this, "<html>The <b>card number</b> or <b>pin</b> is <b>Invalid!</b></html> ", "Uh-oh!", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "<html>The pin you entered is incorrect<br>Please Re-enter the pin</br></html>", "Uh-oh!", JOptionPane.WARNING_MESSAGE);
+                pinField.setText("");
             }
         }
         catch(Exception e) {
-            JOptionPane.showMessageDialog(this, "Something Went Really Wrong!", "Uh-oh!", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "The card number you entered is Invalid!", "Uh-oh!", JOptionPane.WARNING_MESSAGE);
             cardNumberField.setText("");
             pinField.setText("");
         }
@@ -1076,7 +1067,7 @@ public class LoginActivity extends javax.swing.JFrame {
             ResultSet rs = st.executeQuery(Query);
             rs.next();
             float balanceAmountFromDatabase = rs.getFloat(4);
-            JOptionPane.showMessageDialog(this, "The balance amount is Rs. " + balanceAmountFromDatabase, "Balance", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "<html>The balance amount is Rs. <b>" + balanceAmountFromDatabase + "</br></html>", "Balance", JOptionPane.INFORMATION_MESSAGE);
         }
         catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Please retry logging in", "Something Went Wrong", JOptionPane.ERROR_MESSAGE);
@@ -1127,7 +1118,7 @@ public class LoginActivity extends javax.swing.JFrame {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost/atm", "root", "Kishan@1072");
-            String Query = "Select DATE(dt) as date, TIME(tm) as time, amtDebitted from (Select * from " + user + " order by dt desc ) as temp order by tm desc limit 5;";
+            String Query = "Select * from " + user + " order by dt desc limit 5;";
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(Query);
             int i = 1;
@@ -1192,7 +1183,6 @@ public class LoginActivity extends javax.swing.JFrame {
             balanceAmountFromDatabase = rs.getFloat(4);
             amountBalance = balanceAmountFromDatabase;
             
-            //balanceAmountFromDatabase = rs.getFloat(4);
             if(amount <= balanceAmountFromDatabase) {
                 PreparedStatement ps = con.prepareStatement("insert into " + user + " values(?,?," + amount + ");");
                 ps.setDate(1, sqlDate);
