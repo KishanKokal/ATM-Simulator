@@ -1118,7 +1118,7 @@ public class LoginActivity extends javax.swing.JFrame {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost/atm", "root", "Kishan@1072");
-            String Query = "Select * from " + user + " order by dt desc limit 5;";
+            String Query = "select * from " + user + " order by dt desc, tm desc;";
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(Query);
             int i = 1;
