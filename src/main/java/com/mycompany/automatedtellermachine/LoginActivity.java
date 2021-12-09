@@ -1189,6 +1189,7 @@ public class LoginActivity extends JFrame {
         }
         catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Please enter a valid amount");
+            amountField.setText("");
         }
     }//GEN-LAST:event_proceedButton1ActionPerformed
 
