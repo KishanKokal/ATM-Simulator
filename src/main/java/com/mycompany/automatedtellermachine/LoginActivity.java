@@ -195,6 +195,11 @@ public class LoginActivity extends JFrame {
         pinField.setBackground(new java.awt.Color(255, 0, 255));
         pinField.setFont(new java.awt.Font("SF Pro Display", 1, 36)); // NOI18N
         pinField.setForeground(new java.awt.Color(102, 0, 253));
+        pinField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pinFieldActionPerformed(evt);
+            }
+        });
 
         resetButton.setBackground(new java.awt.Color(255, 0, 255));
         resetButton.setFont(new java.awt.Font("SF Pro Display", 1, 36)); // NOI18N
@@ -668,7 +673,7 @@ public class LoginActivity extends JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(userNameField, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel13Layout.createSequentialGroup()
-                        .addGap(528, 528, 528)
+                        .addGap(531, 531, 531)
                         .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(goToDashboardButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel13Layout.createSequentialGroup()
@@ -1075,28 +1080,28 @@ public class LoginActivity extends JFrame {
     }//GEN-LAST:event_transferButtonActionPerformed
 
     private void debitHistoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_debitHistoryButtonActionPerformed
-        date1.setText("");
-        date2.setText("");
-        date3.setText("");
-        date4.setText("");
-        date5.setText("");
+        date1.setText(" ");
+        date2.setText(" ");
+        date3.setText(" ");
+        date4.setText(" ");
+        date5.setText(" ");
         
-        time1.setText("");
-        time2.setText("");
-        time3.setText("");
-        time4.setText("");
-        time5.setText("");
+        time1.setText(" ");
+        time2.setText(" ");
+        time3.setText(" ");
+        time4.setText(" ");
+        time5.setText(" ");
         
-        amount1.setText("");
-        amount2.setText("");
-        amount3.setText("");
-        amount4.setText("");
-        amount5.setText("");
+        amount1.setText(" ");
+        amount2.setText(" ");
+        amount3.setText(" ");
+        amount4.setText(" ");
+        amount5.setText(" ");
         
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost/atm", "root", "Kishan@1072");
-            String Query = "select * from " + user + " order by dt desc, tm desc;";
+            String Query = "select * from " + user + " order by dt desc, tm desc limit 5;";
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(Query);
             int i = 1;
