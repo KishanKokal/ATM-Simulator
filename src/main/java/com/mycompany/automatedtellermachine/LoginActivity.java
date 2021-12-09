@@ -1004,8 +1004,9 @@ public class LoginActivity extends JFrame {
 
     private void proceedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_proceedButtonActionPerformed
         try {
-            int pinNumber = Integer.parseInt(pinField.getText());
+            String pinString = String.valueOf(pinField.getPassword());
             String cardNumber = cardNumberField.getText();
+            int pinFromPassField = Integer.parseInt(pinString);
             
             String Query = "Select * from userInfo where cardNumber = '" + cardNumber + "';" ;
             Class.forName("com.mysql.jdbc.Driver");
@@ -1017,18 +1018,18 @@ public class LoginActivity extends JFrame {
             String card = rs.getString(2);
             user = rs.getString(1);
                 
-            if(pinNumber == pin && cardNumber.equals(card)) {
+            if(cardNumber.equals(card) && pinFromPassField == pin) {
                 jTabbedPane1.setSelectedIndex(1);
                 cardNumberField.setText("");
                 pinField.setText("");
             }
-            else {
-                JOptionPane.showMessageDialog(this, "<html>The pin you entered is incorrect<br>Please Re-enter the pin</br></html>", "Uh-oh!", JOptionPane.WARNING_MESSAGE);
+            else if(cardNumber.equals(card) && pinFromPassField != pin){
+                JOptionPane.showMessageDialog(this, "<html>The pin you entered is incorrect<br>Please Re-enter the pin</br></html>", "Invalid details entered", JOptionPane.WARNING_MESSAGE);
                 pinField.setText("");
             }
         }
         catch(Exception e) {
-            JOptionPane.showMessageDialog(this, "The card number you entered is Invalid!", "Uh-oh!", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please enter a valid card number", "Invalid details entered", JOptionPane.WARNING_MESSAGE);
             cardNumberField.setText("");
             pinField.setText("");
         }
@@ -1179,7 +1180,7 @@ public class LoginActivity extends JFrame {
             amountField.setText("");
         }
         catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e);
+            JOptionPane.showMessageDialog(this, "Please enter a valid amount");
         }
     }//GEN-LAST:event_proceedButton1ActionPerformed
 
@@ -1215,11 +1216,6 @@ public class LoginActivity extends JFrame {
             java.sql.Date sqlDate = new java.sql.Date(date.getTime());
             java.sql.Timestamp sqlTime = new java.sql.Timestamp(date.getTime());
             
-            PreparedStatement ps = con.prepareStatement("insert into " + user + " values(?,?," + amountEnteredFloat + ");");
-            ps.setDate(1, sqlDate);
-            ps.setTimestamp(2, sqlTime);
-            ps.executeUpdate();
-            
             String Query = "Select * from userInfo where name = '" + user + "';";
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(Query);
@@ -1244,9 +1240,15 @@ public class LoginActivity extends JFrame {
                 amountField2.setText("");
                 JOptionPane.showMessageDialog(this, "The Transaction is completed successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
             }
-        } 
+            PreparedStatement ps = con.prepareStatement("insert into " + user + " values(?,?," + amountEnteredFloat + ");");
+            ps.setDate(1, sqlDate);
+            ps.setTimestamp(2, sqlTime);
+            ps.executeUpdate();
+        }  
         catch(Exception e) {
-            JOptionPane.showMessageDialog(this, "Something Went Wromg, Please try again!");
+            JOptionPane.showMessageDialog(this, "The User Name or amount entred is Invalid", "Invalid details", JOptionPane.ERROR_MESSAGE);
+            userNameField.setText("");
+            amountField2.setText("");
         }
     }//GEN-LAST:event_proceedButton2ActionPerformed
 
