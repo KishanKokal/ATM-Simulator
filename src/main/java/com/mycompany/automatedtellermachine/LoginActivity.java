@@ -1170,6 +1170,7 @@ public class LoginActivity extends JFrame {
                 Query2 = "Update userInfo set balanceAmount = " + balanceAmountFromDatabase + " where name = '" + user +"';";
                 Statement stmt = con.createStatement();
                 stmt.executeUpdate(Query2);
+                
                 JOptionPane.showMessageDialog(this, "<html>Tansaction Successfully Completed<br/><b>Please collect the amount before leaving</b></html>", "Success!", JOptionPane.INFORMATION_MESSAGE);
                 jTabbedPane1.setSelectedIndex(0);
                 ps.close();
@@ -1240,11 +1241,16 @@ public class LoginActivity extends JFrame {
                 userNameField.setText("");
                 amountField2.setText("");
                 JOptionPane.showMessageDialog(this, "The Transaction is completed successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+                
+                PreparedStatement ps = con.prepareStatement("insert into " + user + " values(?,?," + amountEnteredFloat + ");");
+                ps.setDate(1, sqlDate);
+                ps.setTimestamp(2, sqlTime);
+                ps.executeUpdate();
             }
-            PreparedStatement ps = con.prepareStatement("insert into " + user + " values(?,?," + amountEnteredFloat + ");");
-            ps.setDate(1, sqlDate);
-            ps.setTimestamp(2, sqlTime);
-            ps.executeUpdate();
+            else {
+                JOptionPane.showMessageDialog(this, "The account does not have sufficient balance!", "Insufficient balance!", JOptionPane.ERROR_MESSAGE);
+                amountField2.setText("");
+            }
         }  
         catch(Exception e) {
             JOptionPane.showMessageDialog(this, "The User Name or amount entred is Invalid", "Invalid details", JOptionPane.ERROR_MESSAGE);
