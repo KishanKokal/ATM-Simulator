@@ -1014,6 +1014,7 @@ public class LoginActivity extends JFrame {
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(Query);
             rs.next();
+            
             int pin = rs.getInt(3);
             String card = rs.getString(2);
             user = rs.getString(1);
@@ -1156,16 +1157,17 @@ public class LoginActivity extends JFrame {
             ResultSet rs = st.executeQuery(Query);
             rs.next();
             balanceAmountFromDatabase = rs.getFloat(4);
-            amountBalance = balanceAmountFromDatabase;
             
             if(amount <= balanceAmountFromDatabase) {
-                PreparedStatement ps = con.prepareStatement("insert into " + user + " values(?,?," + amount + ");");
+                
+                PreparedStatement ps = con.prepareStatement("insert into " + user + " values(?,?, + " + amount +");");
                 ps.setDate(1, sqlDate);
                 ps.setTimestamp(2, sqlTime);
                 ps.executeUpdate();
+                
                 String Query2;
-                amountBalance -= amount;
-                Query2 = "Update userInfo set balanceAmount = " + amountBalance + " where name = '" + user +"';";
+                balanceAmountFromDatabase -= amount;
+                Query2 = "Update userInfo set balanceAmount = " + balanceAmountFromDatabase + " where name = '" + user +"';";
                 Statement stmt = con.createStatement();
                 stmt.executeUpdate(Query2);
                 JOptionPane.showMessageDialog(this, "<html>Tansaction Successfully Completed<br/><b>Please collect the amount before leaving</b></html>", "Success!", JOptionPane.INFORMATION_MESSAGE);
@@ -1221,7 +1223,6 @@ public class LoginActivity extends JFrame {
             ResultSet rs = st.executeQuery(Query);
             rs.next();
             balanceAmountFromDatabase = rs.getFloat(4);
-            amountBalance = balanceAmountFromDatabase;
             
             String Query1 = "Select * from userInfo where name = '" + receiverUserName + "';";
             Statement st1 = con.createStatement();
@@ -1229,10 +1230,10 @@ public class LoginActivity extends JFrame {
             rs2.next();
             receiverBalance = rs2.getFloat(4);
             
-            if(amountBalance >= amountEnteredFloat) {
-                amountBalance -= amountEnteredFloat;
+            if(balanceAmountFromDatabase >= amountEnteredFloat) {
+                balanceAmountFromDatabase -= amountEnteredFloat;
                 receiverBalance += amountEnteredFloat;
-                String Query2 = "Update userInfo set balanceAmount = " + amountBalance + " where name = '" + user + "';";
+                String Query2 = "Update userInfo set balanceAmount = " + balanceAmountFromDatabase + " where name = '" + user + "';";
                 String Query3 = "Update userInfo set balanceAmount = " + receiverBalance + " where name = '" + receiverUserName + "';";
                 st.executeUpdate(Query2);
                 st.executeUpdate(Query3);
